@@ -53,8 +53,9 @@ earth.position.set(earthD, 0, 0);
 scene.add(sun);
 scene.add(earth);
 scene.add(ambientLight);
-
 scene.add(axesHelper);
+
+scene.background = new THREE.Color('rgb(0, 2, 27)');
 
 const camera = new THREE.PerspectiveCamera(
   45,
