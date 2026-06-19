@@ -1,0 +1,19 @@
+@layer reset {
+  html, body {
+    height: 100%;
+  }
+
+  body {
+    display: grid;
+    margin: 0;
+    place-items: center;
+    background-color: oklch(0.13 0.08 261.18 / 1);
+    overflow: clip;
+  }
+
+  @media (prefers-color-scheme: light) {
+    body {
+      background-color: oklch(0.97 0.006 261.18 / 1);
+    }
+  }
+}
