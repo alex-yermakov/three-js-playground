@@ -22,6 +22,7 @@ export class Planet {
   readonly moons: TMoon[] = [];
 
   constructor(
+    readonly key: string,
     private readonly radius: number,
     private readonly farthestDistance: number,
     private readonly closestDistance: number,
@@ -40,6 +41,9 @@ export class Planet {
 
     this.mesh = new THREE.Mesh(this.geometry, this.material);
 
+    this.mesh.castShadow = true;
+    this.mesh.receiveShadow = true;
+
     this.update(0);
   }
 
@@ -47,11 +51,8 @@ export class Planet {
     const scaledRadius = this.scaleSize(radius);
 
     const geometry = new THREE.SphereGeometry(scaledRadius, 128, 64);
-    const material = new THREE.MeshStandardMaterial({ map });
+    const material = new THREE.MeshStandardMaterial({ map: map ?? null });
     const mesh = new THREE.Mesh(geometry, material);
-
-    this.mesh.castShadow = true;
-    this.mesh.receiveShadow = true;
 
     mesh.castShadow = true;
     mesh.receiveShadow = true;
@@ -99,10 +100,10 @@ export class Planet {
 
   private getPosition(theta: number) {
     const e = this.eccentricity; // eccentricity coefficient;
-    const a = this.scaleDistance(this.farthestDistance + this.closestDistance) / 2; // semi-major axis;
+    const a = this.scaleDistance((this.farthestDistance + this.closestDistance) / 2); // semi-major axis;
 
-    const alpha = this.orbitAngle * Math.cos(theta);
-    const r = (a * (1 - e ** 2)) / (1 + e * Math.cos(theta));
+    const alpha = this.orbitAngle * Math.cos(theta) * 0;
+    const r = (a * (1 - e ** 2)) / (1 - e * Math.cos(theta));
     const x = r * Math.cos(theta) * Math.cos(alpha);
     const z = -r * Math.sin(theta) * Math.cos(alpha);
     const y = r * Math.sin(alpha);

@@ -89,3 +89,7 @@ export const PLANETS = [
   { key: 'URANUS' },
   { key: 'NEPTUNE' },
 ] satisfies { key: string; moons?: string[] }[];
+
+export const BELT_CLOSEST_DISTANCE = 329_466_000;
+export const BELT_FARTHEST_DISTANCE = 479_466_000;
+export const BELT_YEAR = 4.6; // in earth years

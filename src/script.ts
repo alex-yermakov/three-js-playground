@@ -34,7 +34,7 @@ const sun = new THREE.Mesh(
   })
 );
 
-const sunLight = new THREE.PointLight(0xffffff, 300, 100, 1.5);
+const sunLight = new THREE.PointLight(0xffffff, 300, 100, 1);
 
 sunLight.castShadow = true;
 sunLight.position.copy(sun.position);
@@ -57,6 +57,7 @@ const textures = {
 
 const planets = constants.PLANETS.map(({ key, moons }) => {
   const planet = new Planet(
+    key,
     constants[`${key}_RADIUS`],
     constants[`${key}_FARTHEST_DISTANCE`],
     constants[`${key}_CLOSEST_DISTANCE`],
@@ -85,10 +86,38 @@ planets[2].material.displacementMap = textureLoader.load(earthHeightTexture);
 planets[2].material.displacementScale = 0.01;
 planets[2].material.displacementBias = 0.01;
 
+// ====== ASTEROID BELT =====
+
+const { SUN_RADIUS, BELT_CLOSEST_DISTANCE, BELT_FARTHEST_DISTANCE, BELT_YEAR } = constants;
+
+const beltClosestDistance = (BELT_CLOSEST_DISTANCE / SUN_RADIUS) ** Planet.distanceScaleFactor;
+const beltFarthestDistance = (BELT_FARTHEST_DISTANCE / SUN_RADIUS) ** Planet.distanceScaleFactor;
+const beltWidth = beltFarthestDistance - beltClosestDistance;
+
+const belt = new THREE.Group();
+
+const asteroidMaterial = new THREE.MeshLambertMaterial({ color: 0x808080 });
+
+for (let i = 0; i < 1000; i++) {
+  const size = Math.random() * 0.01 + 0.005;
+  const geometry = new THREE.SphereGeometry(size);
+  const mesh = new THREE.Mesh(geometry, asteroidMaterial);
+
+  const theta = Math.random() * Math.PI * 2;
+  const r = Math.random() * beltWidth + beltClosestDistance;
+  const x = r * Math.cos(theta);
+  const z = -r * Math.sin(theta);
+  const y = Math.random() * 0.01 + 0.005;
+
+  mesh.position.set(x, y, z);
+  belt.add(mesh);
+}
+
 // ====== SCENE ======
 
 scene.add(ambientLight);
 scene.add(sun);
+scene.add(belt);
 
 planets.forEach((planet) => planet.register(scene));
 
@@ -143,6 +172,8 @@ function animate(time: number) {
   planets.forEach((planet) => {
     planet.update(time);
   });
+
+  belt.rotation.y = (2 * Math.PI * (time / 1000) * Planet.yearsPerSecond) / BELT_YEAR;
 
   controls.update();
   renderer.render(scene, camera);
