@@ -48,9 +48,16 @@ export class Planet {
 
     const geometry = new THREE.SphereGeometry(scaledRadius, 128, 64);
     const material = new THREE.MeshStandardMaterial({ map });
+    const mesh = new THREE.Mesh(geometry, material);
+
+    this.mesh.castShadow = true;
+    this.mesh.receiveShadow = true;
+
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
 
     this.moons.push({
-      mesh: new THREE.Mesh(geometry, material),
+      mesh,
       distance,
       orbitPeriod,
       dayLength,

@@ -36,6 +36,7 @@ const sun = new THREE.Mesh(
 
 const sunLight = new THREE.PointLight(0xffffff, 300, 100, 1.5);
 
+sunLight.castShadow = true;
 sunLight.position.copy(sun.position);
 sun.add(sunLight);
 
@@ -119,6 +120,8 @@ controls.enablePan = true;
 controls.enableDamping = true;
 controls.minDistance = 2;
 controls.maxDistance = 150;
+
+renderer.shadowMap.enabled = true;
 
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
