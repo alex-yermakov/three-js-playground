@@ -64,19 +64,26 @@ export const NEPTUNE_ORBIT_ANGLE = 0.0039828; // in radians
 export const NEPTUNE_ORBIT_PERIOD = 164.79132; // in earth years
 export const NEPTUNE_DAY_LENGTH = 164.79132; // in earth days
 
-export const EARTH_MOON_RADIUS = 1_737.4;
-export const EARTH_MOON_DISTANCE = 384_400;
-export const EARTH_MOON_ORBIT_PERIOD = 0.0748; // in earth years
-export const EARTH_MOON_DAY_LENGTH = 27.321661; // in earth days
+export const MOON_RADIUS = 1_737.4;
+export const MOON_DISTANCE = 384_400;
+export const MOON_ORBIT_PERIOD = 0.0748; // in earth years
+export const MOON_DAY_LENGTH = 27.321661; // in earth days
+
+export const PHOBOS_RADIUS = 13.2;
+export const PHOBOS_DISTANCE = 9_376;
+export const PHOBOS_ORBIT_PERIOD = 0.3189102; // in earth years
+export const PHOBOS_DAY_LENGTH = 0.3229; // in earth days
+
+export const DEIMOS_RADIUS = 6.2;
+export const DEIMOS_DISTANCE = 23_460;
+export const DEIMOS_ORBIT_PERIOD = 1.26244; // in earth years
+export const DEIMOS_DAY_LENGTH = 1.26244; // in earth days
 
 export const PLANETS = [
   { key: 'MERCURY' },
   { key: 'VENUS' },
-  {
-    key: 'EARTH',
-    moons: ['EARTH_MOON'],
-  },
-  { key: 'MARS' },
+  { key: 'EARTH', moons: ['MOON'] },
+  { key: 'MARS', moons: ['PHOBOS', 'DEIMOS'] },
   { key: 'JUPITER' },
   { key: 'SATURN' },
   { key: 'URANUS' },
