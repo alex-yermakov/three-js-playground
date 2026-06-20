@@ -1,33 +1,31 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import GUI from 'lil-gui';
 
 import sunTexture from './textures/sun-color-map.jpg';
+import mercuryTexture from './textures/mercury-color-map.jpg';
+import venusTexture from './textures/venus-color-map.jpg';
 import earthTexture from './textures/earth-color-map.jpg';
+import marsTexture from './textures/mars-color-map.jpg';
+import jupiterTexture from './textures/jupiter-color-map.jpg';
+import saturnTexture from './textures/saturn-color-map.jpg';
+import uranusTexture from './textures/uranus-color-map.jpg';
+import neptuneTexture from './textures/neptune-color-map.jpg';
 import earthHeightTexture from './textures/earth-height-map.jpg';
-import cosmos from './textures/env/stars-milkyway-8k.jpg';
-
-const SUN_RADIUS = 696_000;
-const EARTH_RADIUS = 6_371;
-const EARTH_DISPLACEMENT_RATIO = 0.025;
-const SUN_EARTH_D = 150_000_000;
-
-const config = {
-  animating: true,
-  sizeScaleFactor: 0.3,
-  distanceScaleFactor: 0.4,
-};
-
-const gui = new GUI();
-const textureLoader = new THREE.TextureLoader();
+import earthMoonTexture from './textures/moon-color-map.jpg';
+import cosmos from './textures/cosmos.jpg';
+import { Planet } from './planet';
+import * as constants from './constants';
 
 const scene = new THREE.Scene();
 
-// const axesHelper = new THREE.AxesHelper(10);
 const ambientLight = new THREE.AmbientLight('rgb(0 2 39)', 0.03);
+const textureLoader = new THREE.TextureLoader();
 
-const sunTextureMap = textureLoader.load(sunTexture);
-sunTextureMap.colorSpace = THREE.SRGBColorSpace;
+// ===== SUN =====
+
+const sunTextureMap = textureLoader.load(sunTexture, () => {
+  sunTextureMap.colorSpace = THREE.SRGBColorSpace;
+});
 
 const sun = new THREE.Mesh(
   new THREE.SphereGeometry(1, 128, 128),
@@ -36,31 +34,62 @@ const sun = new THREE.Mesh(
   })
 );
 
-const sunLight = new THREE.PointLight(0xffffff, 300, 0, 1.5);
+const sunLight = new THREE.PointLight(0xffffff, 300, 100, 1.5);
 
 sunLight.position.copy(sun.position);
 sun.add(sunLight);
 
-const earthR = (EARTH_RADIUS / SUN_RADIUS) ** config.sizeScaleFactor;
-const earthD = (SUN_EARTH_D / SUN_RADIUS) ** config.distanceScaleFactor;
-const earthTextureMap = textureLoader.load(earthTexture);
-earthTextureMap.colorSpace = THREE.SRGBColorSpace;
+// ===== PLANETS =====
 
-const earth = new THREE.Mesh(
-  new THREE.SphereGeometry(earthR, 256, 128),
-  new THREE.MeshLambertMaterial({
-    map: earthTextureMap,
-    displacementMap: textureLoader.load(earthHeightTexture),
-    displacementScale: EARTH_DISPLACEMENT_RATIO * earthR,
-  })
-);
+const textures = {
+  MERCURY: textureLoader.load(mercuryTexture),
+  VENUS: textureLoader.load(venusTexture),
+  EARTH: textureLoader.load(earthTexture),
+  MARS: textureLoader.load(marsTexture),
+  JUPITER: textureLoader.load(jupiterTexture),
+  SATURN: textureLoader.load(saturnTexture),
+  URANUS: textureLoader.load(uranusTexture),
+  NEPTUNE: textureLoader.load(neptuneTexture),
 
-earth.position.set(earthD, 0, 0);
+  EARTH_MOON: textureLoader.load(earthMoonTexture),
+};
 
-scene.add(sun);
-scene.add(earth);
+const planets = constants.PLANETS.map(({ key, moons }) => {
+  const planet = new Planet(
+    constants[`${key}_RADIUS`],
+    constants[`${key}_FARTHEST_DISTANCE`],
+    constants[`${key}_CLOSEST_DISTANCE`],
+    constants[`${key}_ECCENTRICITY`],
+    constants[`${key}_ORBIT_PERIOD`],
+    constants[`${key}_ORBIT_ANGLE`],
+    constants[`${key}_DAY_LENGTH`],
+    textures[key]
+  );
+
+  moons?.forEach((moon) => {
+    planet.addMoon(
+      constants[`${moon}_RADIUS`],
+      constants[`${moon}_DISTANCE`],
+      constants[`${moon}_ORBIT_PERIOD`],
+      constants[`${moon}_DAY_LENGTH`],
+      textures[moon]
+    );
+  });
+
+  return planet;
+});
+
+// Earth height map
+planets[2].material.displacementMap = textureLoader.load(earthHeightTexture);
+planets[2].material.displacementScale = 0.01;
+planets[2].material.displacementBias = 0.01;
+
+// ====== SCENE ======
+
 scene.add(ambientLight);
-// scene.add(axesHelper);
+scene.add(sun);
+
+planets.forEach((planet) => planet.register(scene));
 
 scene.background = new THREE.Color('rgb(0, 2, 27)');
 
@@ -72,10 +101,10 @@ textureLoader.load(cosmos, (texture) => {
   scene.environment = texture;
 });
 
-const camera = new THREE.PerspectiveCamera(
-  45,
-  window.innerWidth / window.innerHeight
-);
+// ===== CAMERA, RENDERER, CONTROLS =====
+
+const aspectRatio = window.innerWidth / window.innerHeight;
+const camera = new THREE.PerspectiveCamera(45, aspectRatio);
 
 const renderer = new THREE.WebGLRenderer({
   canvas: document.querySelector('canvas.webgl')!,
@@ -83,13 +112,13 @@ const renderer = new THREE.WebGLRenderer({
 
 const controls = new OrbitControls(camera, renderer.domElement);
 
-camera.position.setFromSphericalCoords(25, Math.PI / 3, 0);
+camera.position.setFromSphericalCoords(60, Math.PI / 2, 0);
 camera.lookAt(sun.position);
 
-controls.enablePan = false;
+controls.enablePan = true;
 controls.enableDamping = true;
 controls.minDistance = 2;
-controls.maxDistance = 50;
+controls.maxDistance = 150;
 
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -97,25 +126,7 @@ renderer.render(scene, camera);
 
 renderer.setAnimationLoop(animate);
 
-gui.add(config, 'animating');
-gui
-  .add(config, 'sizeScaleFactor')
-  .min(0)
-  .max(0.75)
-  .step(0.01)
-  .onChange((value: number) => {
-    const params = earth.geometry.parameters;
-    const radius = (EARTH_RADIUS / SUN_RADIUS) ** value;
-
-    earth.material.displacementScale = EARTH_DISPLACEMENT_RATIO * radius;
-
-    earth.geometry.dispose();
-    earth.geometry = new THREE.SphereGeometry(
-      radius,
-      params.widthSegments,
-      params.heightSegments
-    );
-  });
+// ===== EVENT LISTENERS =====
 
 window.addEventListener('resize', () => {
   camera.aspect = window.innerWidth / window.innerHeight;
@@ -125,20 +136,11 @@ window.addEventListener('resize', () => {
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 });
 
-function animate(clock: number) {
-  if (config.animating) {
-    setEarthPosition(clock * 0.00025);
-  }
+function animate(time: number) {
+  planets.forEach((planet) => {
+    planet.update(time);
+  });
 
   controls.update();
   renderer.render(scene, camera);
-}
-
-function setEarthPosition(theta: number) {
-  const e = 0.0167;
-  const r = (earthD * (1 - e ** 2)) / (1 + e * Math.cos(theta));
-  const x = r * Math.cos(theta);
-  const z = -r * Math.sin(theta);
-
-  earth.position.set(x, 0, z);
 }
