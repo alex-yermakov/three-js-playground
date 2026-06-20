@@ -107,7 +107,7 @@ for (let i = 0; i < 1000; i++) {
   const r = Math.random() * beltWidth + beltClosestDistance;
   const x = r * Math.cos(theta);
   const z = -r * Math.sin(theta);
-  const y = Math.random() * 0.01 + 0.005;
+  const y = Math.random() * 0.1 + 0.05;
 
   mesh.position.set(x, y, z);
   belt.add(mesh);
@@ -142,7 +142,7 @@ const renderer = new THREE.WebGLRenderer({
 
 const controls = new OrbitControls(camera, renderer.domElement);
 
-camera.position.setFromSphericalCoords(60, Math.PI / 2, 0);
+camera.position.setFromSphericalCoords(60, Math.PI / 3, 0);
 camera.lookAt(sun.position);
 
 controls.enablePan = true;
