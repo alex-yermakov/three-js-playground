@@ -13,8 +13,8 @@ import neptuneTexture from './textures/neptune-color-map.jpg';
 import earthHeightTexture from './textures/earth-height-map.jpg';
 import earthMoonTexture from './textures/moon-color-map.jpg';
 import cosmos from './textures/cosmos.jpg';
-import { Planet } from './planet';
 import * as constants from './constants';
+import { Planet } from './planet';
 
 const scene = new THREE.Scene();
 
@@ -168,6 +168,10 @@ window.addEventListener('resize', () => {
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 });
 
+let lastTime = 0;
+let lastUpdated = 0;
+const fpsMonitor = document.querySelector('.fps')!;
+
 function animate(time: number) {
   planets.forEach((planet) => {
     planet.update(time);
@@ -177,4 +181,13 @@ function animate(time: number) {
 
   controls.update();
   renderer.render(scene, camera);
+
+  const fps = 1000 / (time - lastTime);
+
+  lastTime = time;
+
+  if (time - lastUpdated > 1000) {
+    fpsMonitor.textContent = `FPS: ${fps.toFixed(2)}`;
+    lastUpdated = time;
+  }
 }

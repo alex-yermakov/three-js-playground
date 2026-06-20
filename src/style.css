@@ -1,5 +1,6 @@
 @layer reset {
-  html, body {
+  html,
+  body {
     height: 100%;
   }
 
@@ -7,6 +8,9 @@
     display: grid;
     margin: 0;
     place-items: center;
+    font:
+      16px / 1.5 Helvetica,
+      sans-serif;
     background-color: oklch(0.13 0.08 261.18 / 1);
     overflow: clip;
   }
@@ -16,4 +20,18 @@
       background-color: oklch(0.97 0.006 261.18 / 1);
     }
   }
+}
+
+.fps-monitor {
+  position: fixed;
+  inset: auto 1rem 1rem auto;
+  padding: 1rem;
+  min-width: 100px;
+  text-align: right;
+  background-color: oklch(0.13 0.08 261.18 / 1);
+  border: 1px solid oklch(0.97 0.006 261.18 / 1);
+  border-radius: 0.5rem;
+  font-weight: 600;
+  color: oklch(0.97 0.006 261.18 / 1);
+  text-shadow: 0 0 0.5rem oklch(0.13 0.08 261.18 / 1);
 }
