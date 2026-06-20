@@ -12,8 +12,8 @@ export class Planet {
   static sizeScaleFactor = 0.4;
   static distanceScaleFactor = 0.45;
 
-  static yearsPerSecond = 1 / 60;
-  static daysPerSecond = 1 / 5;
+  static secondsPerYear = 60;
+  static secondsPerDay = 5;
 
   readonly geometry: THREE.SphereGeometry;
   readonly material: THREE.MeshStandardMaterial;
@@ -76,11 +76,11 @@ export class Planet {
   update(time: number) {
     const seconds = time / 1000;
 
-    const earthYears = seconds * Planet.yearsPerSecond;
+    const earthYears = seconds / Planet.secondsPerYear;
     const orbitAngle = (earthYears * Math.PI * 2) / this.orbitPeriod;
     const orbitPosition = this.getPosition(orbitAngle);
 
-    const earthDays = seconds * Planet.daysPerSecond;
+    const earthDays = seconds / Planet.secondsPerDay;
     const rotationAngle = (earthDays * Math.PI * 2) / this.dayLength;
 
     this.moons.forEach((moon) => {

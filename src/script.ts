@@ -177,7 +177,7 @@ function animate(time: number) {
     planet.update(time);
   });
 
-  belt.rotation.y = (2 * Math.PI * (time / 1000) * Planet.yearsPerSecond) / BELT_YEAR;
+  belt.rotation.y = (2 * Math.PI * time) / 1000 / Planet.secondsPerYear / BELT_YEAR;
 
   controls.update();
   renderer.render(scene, camera);
