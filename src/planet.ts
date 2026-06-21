@@ -15,6 +15,8 @@ export class Planet {
   static secondsPerYear = 60;
   static secondsPerDay = 5;
 
+  readonly group: THREE.Group;
+
   readonly geometry: THREE.SphereGeometry;
   readonly material: THREE.MeshStandardMaterial;
   readonly mesh: THREE.Mesh;
@@ -36,6 +38,8 @@ export class Planet {
 
     map.colorSpace = THREE.SRGBColorSpace;
 
+    this.group = new THREE.Group();
+
     this.geometry = new THREE.SphereGeometry(scaledRadius, 256, 128);
     this.material = new THREE.MeshStandardMaterial({ map });
 
@@ -43,6 +47,8 @@ export class Planet {
 
     this.mesh.castShadow = true;
     this.mesh.receiveShadow = true;
+
+    this.group.add(this.mesh);
 
     this.update(0);
   }
@@ -57,6 +63,7 @@ export class Planet {
     mesh.castShadow = true;
     mesh.receiveShadow = true;
 
+    this.group.add(mesh);
     this.moons.push({
       mesh,
       distance,
@@ -65,12 +72,18 @@ export class Planet {
     });
   }
 
-  register(scene: THREE.Scene) {
-    scene.add(this.mesh);
+  addOrbit() {
+    const res = 1000;
+    const points = Array.from({ length: res }, (_, i) => this.getPosition((i * Math.PI * 2) / res));
+    const geometry = new THREE.BufferGeometry().setFromPoints(points);
+    const material = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.3 });
+    const mesh = new THREE.Line(geometry, material);
 
-    this.moons.forEach((moon) => {
-      scene.add(moon.mesh);
-    });
+    this.group.add(mesh);
+  }
+
+  register(scene: THREE.Scene) {
+    scene.add(this.group);
   }
 
   update(time: number) {

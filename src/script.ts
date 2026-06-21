@@ -72,6 +72,8 @@ const planets = constants.PLANETS.map(({ key, moons }) => {
     textures[key]
   );
 
+  planet.addOrbit();
+
   moons?.forEach((moon) => {
     planet.addMoon(
       constants[`${moon}_RADIUS`],
