@@ -34,7 +34,7 @@ const sun = new THREE.Mesh(
   })
 );
 
-const sunLight = new THREE.PointLight(0xffffff, 300, 100, 1);
+const sunLight = new THREE.PointLight(0xffffff, 25, 60, 0.25);
 
 sunLight.castShadow = true;
 sunLight.position.copy(sun.position);
