@@ -130,3 +130,9 @@ export const MARS_MOONS = [
     axialTilt: 0.034, // in radians
   },
 ];
+
+export const SATURN_RING = {
+  closestDistance: 74_000,
+  farthestDistance: 180_000,
+  angle: 0.47647,
+};
