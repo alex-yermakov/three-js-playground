@@ -16,8 +16,8 @@ import neptuneTexture from './textures/neptune-color-map.jpg';
 import earthHeightTexture from './textures/earth-height-map.jpg';
 import earthMoonTexture from './textures/moon-color-map.jpg';
 import cosmos from './textures/cosmos.jpg';
-import * as constants from './constants';
 import { Planet } from './planet';
+import { SUN_RADIUS, BELT_CLOSEST_DISTANCE, BELT_FARTHEST_DISTANCE, BELT_YEAR, PLANETS } from './constants';
 
 const scene = new THREE.Scene();
 
@@ -59,29 +59,13 @@ const textures = {
   EARTH_MOON: textureLoader.load(earthMoonTexture),
 };
 
-const planets = constants.PLANETS.map(({ key, moons }) => {
-  const planet = new Planet(
-    key,
-    constants[`${key}_RADIUS`],
-    constants[`${key}_FARTHEST_DISTANCE`],
-    constants[`${key}_CLOSEST_DISTANCE`],
-    constants[`${key}_ECCENTRICITY`],
-    constants[`${key}_ORBIT_PERIOD`],
-    constants[`${key}_ORBIT_ANGLE`],
-    constants[`${key}_DAY_LENGTH`],
-    textures[key]
-  );
+const planets = PLANETS.map((cfg) => {
+  const planet = new Planet(cfg, textures[cfg.key]);
 
   planet.addOrbit();
 
-  moons?.forEach((moon) => {
-    planet.addMoon(
-      constants[`${moon}_RADIUS`],
-      constants[`${moon}_DISTANCE`],
-      constants[`${moon}_ORBIT_PERIOD`],
-      constants[`${moon}_DAY_LENGTH`],
-      textures[moon]
-    );
+  cfg.moons?.forEach((moon) => {
+    planet.addMoon(moon.radius, moon.distance, moon.orbitPeriod, moon.dayLength, textures[moon.key]);
   });
 
   return planet;
@@ -93,8 +77,6 @@ planets[2].material.displacementScale = 0.01;
 planets[2].material.displacementBias = 0.01;
 
 // ====== ASTEROID BELT =====
-
-const { SUN_RADIUS, BELT_CLOSEST_DISTANCE, BELT_FARTHEST_DISTANCE, BELT_YEAR } = constants;
 
 const beltClosestDistance = (BELT_CLOSEST_DISTANCE / SUN_RADIUS) ** Planet.distanceScaleFactor;
 const beltFarthestDistance = (BELT_FARTHEST_DISTANCE / SUN_RADIUS) ** Planet.distanceScaleFactor;

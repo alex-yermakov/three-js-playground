@@ -1,6 +1,17 @@
 import * as THREE from 'three';
 import { SUN_RADIUS } from './constants';
 
+type TPlanetCfg = {
+  key: string;
+  radius: number;
+  farthestDistance: number;
+  closestDistance: number;
+  eccentricity: number;
+  orbitPeriod: number;
+  orbitAngle: number;
+  dayLength: number;
+};
+
 type TMoon = {
   mesh: THREE.Mesh;
   distance: number;
@@ -24,17 +35,10 @@ export class Planet {
   readonly moons: TMoon[] = [];
 
   constructor(
-    readonly key: string,
-    private readonly radius: number,
-    private readonly farthestDistance: number,
-    private readonly closestDistance: number,
-    private readonly eccentricity: number,
-    private readonly orbitPeriod: number,
-    private readonly orbitAngle: number,
-    private readonly dayLength: number,
+    private readonly cfg: TPlanetCfg,
     map: THREE.Texture
   ) {
-    const scaledRadius = this.scaleSize(this.radius);
+    const scaledRadius = this.scaleSize(this.cfg.radius);
 
     map.colorSpace = THREE.SRGBColorSpace;
 
@@ -90,11 +94,11 @@ export class Planet {
     const seconds = time / 1000;
 
     const earthYears = seconds / Planet.secondsPerYear;
-    const orbitAngle = (earthYears * Math.PI * 2) / this.orbitPeriod;
+    const orbitAngle = (earthYears * Math.PI * 2) / this.cfg.orbitPeriod;
     const orbitPosition = this.getPosition(orbitAngle);
 
     const earthDays = seconds / Planet.secondsPerDay;
-    const rotationAngle = (earthDays * Math.PI * 2) / this.dayLength;
+    const rotationAngle = (earthDays * Math.PI * 2) / this.cfg.dayLength;
 
     this.moons.forEach((moon) => {
       const moonOrbitAngle = (earthYears * Math.PI * 2) / moon.orbitPeriod;
@@ -112,11 +116,11 @@ export class Planet {
   }
 
   private getPosition(theta: number) {
-    const e = this.eccentricity; // eccentricity coefficient;
-    const a = this.scaleDistance((this.farthestDistance + this.closestDistance) / 2); // semi-major axis;
+    const e = this.cfg.eccentricity; // eccentricity coefficient;
+    const a = this.scaleDistance((this.cfg.farthestDistance + this.cfg.closestDistance) / 2); // semi-major axis;
 
-    const alpha = this.orbitAngle * Math.cos(theta) * 0;
-    const r = (a * (1 - e ** 2)) / (1 - e * Math.cos(theta));
+    const alpha = this.cfg.orbitAngle * Math.cos(theta) * 0;
+    const r = (a * (1 - e ** 2)) / (1 + e * Math.cos(theta));
     const x = r * Math.cos(theta) * Math.cos(alpha);
     const z = -r * Math.sin(theta) * Math.cos(alpha);
     const y = r * Math.sin(alpha);
