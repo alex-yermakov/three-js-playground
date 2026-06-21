@@ -1,29 +1,19 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-
-import satelliteModel from './models/satellite.glb';
 
 import sunTexture from './textures/sun-color-map.jpg';
-import mercuryTexture from './textures/mercury-color-map.jpg';
-import venusTexture from './textures/venus-color-map.jpg';
-import earthTexture from './textures/earth-color-map.jpg';
-import marsTexture from './textures/mars-color-map.jpg';
-import jupiterTexture from './textures/jupiter-color-map.jpg';
-import saturnTexture from './textures/saturn-color-map.jpg';
-import uranusTexture from './textures/uranus-color-map.jpg';
-import neptuneTexture from './textures/neptune-color-map.jpg';
-import earthHeightTexture from './textures/earth-height-map.jpg';
-import earthMoonTexture from './textures/moon-color-map.jpg';
 import cosmos from './textures/cosmos.jpg';
-import { Planet } from './planet';
-import { SUN_RADIUS, BELT_CLOSEST_DISTANCE, BELT_FARTHEST_DISTANCE, BELT_YEAR, PLANETS } from './constants';
+import { planets, planetsTick } from './objects/planets';
+import { orbits } from './objects/orbits';
+import { moons, moonsTick } from './objects/moons';
+import { belt, beltTick } from './objects/belt';
+import { satellite, satelliteTick } from './objects/satellite';
+import { config } from './config';
 
 const scene = new THREE.Scene();
 
 const ambientLight = new THREE.AmbientLight('rgb(0 2 39)', 0.1);
 const textureLoader = new THREE.TextureLoader();
-const gltfLoader = new GLTFLoader();
 
 // ===== SUN =====
 
@@ -44,85 +34,16 @@ sunLight.castShadow = true;
 sunLight.position.copy(sun.position);
 sun.add(sunLight);
 
-// ===== PLANETS =====
-
-const textures = {
-  MERCURY: textureLoader.load(mercuryTexture),
-  VENUS: textureLoader.load(venusTexture),
-  EARTH: textureLoader.load(earthTexture),
-  MARS: textureLoader.load(marsTexture),
-  JUPITER: textureLoader.load(jupiterTexture),
-  SATURN: textureLoader.load(saturnTexture),
-  URANUS: textureLoader.load(uranusTexture),
-  NEPTUNE: textureLoader.load(neptuneTexture),
-
-  EARTH_MOON: textureLoader.load(earthMoonTexture),
-};
-
-const planets = PLANETS.map((cfg) => {
-  const planet = new Planet(cfg, textures[cfg.key]);
-
-  planet.addOrbit();
-
-  cfg.moons?.forEach((moon) => {
-    planet.addMoon(moon.radius, moon.distance, moon.orbitPeriod, moon.dayLength, textures[moon.key]);
-  });
-
-  return planet;
-});
-
-// Earth height map
-planets[2].material.displacementMap = textureLoader.load(earthHeightTexture);
-planets[2].material.displacementScale = 0.01;
-planets[2].material.displacementBias = 0.01;
-
-// ====== ASTEROID BELT =====
-
-const beltClosestDistance = (BELT_CLOSEST_DISTANCE / SUN_RADIUS) ** Planet.distanceScaleFactor;
-const beltFarthestDistance = (BELT_FARTHEST_DISTANCE / SUN_RADIUS) ** Planet.distanceScaleFactor;
-const beltWidth = beltFarthestDistance - beltClosestDistance;
-
-const belt = new THREE.Group();
-
-const asteroidMaterial = new THREE.MeshLambertMaterial({ color: 0x808080 });
-
-for (let i = 0; i < 1000; i++) {
-  const size = Math.random() * 0.01 + 0.005;
-  const geometry = new THREE.SphereGeometry(size);
-  const mesh = new THREE.Mesh(geometry, asteroidMaterial);
-
-  const theta = Math.random() * Math.PI * 2;
-  const r = Math.random() * beltWidth + beltClosestDistance;
-  const x = r * Math.cos(theta);
-  const z = -r * Math.sin(theta);
-  const y = Math.random() * 0.1 + 0.05;
-
-  mesh.position.set(x, y, z);
-  belt.add(mesh);
-}
-
-// ===== SATELLITE =====
-
-let satellite: THREE.Object3D;
-gltfLoader.load(satelliteModel, (gltf) => {
-  const position = camera.position.clone();
-
-  position.multiplyScalar(0.999);
-  position.x += -0.03;
-
-  satellite = gltf.scene;
-  satellite.position.copy(position);
-  satellite.scale.setScalar(0.001);
-  scene.add(satellite);
-});
-
 // ====== SCENE ======
 
 scene.add(ambientLight);
 scene.add(sun);
-scene.add(belt);
 
-planets.forEach((planet) => planet.register(scene));
+scene.add(planets);
+scene.add(orbits);
+scene.add(moons);
+scene.add(belt);
+scene.add(satellite);
 
 scene.background = new THREE.Color('rgb(0, 2, 27)');
 
@@ -145,11 +66,12 @@ const renderer = new THREE.WebGLRenderer({
 
 const controls = new OrbitControls(camera, renderer.domElement);
 
-camera.position.setFromSphericalCoords(60, Math.PI / 3, 0);
+camera.position.setFromSphericalCoords(config.cameraDistance, config.cameraPitch, 0);
 camera.lookAt(sun.position);
 
 controls.enablePan = true;
 controls.enableDamping = true;
+controls.maxPolarAngle = Math.PI / 2;
 controls.minDistance = 2;
 controls.maxDistance = 150;
 
@@ -176,22 +98,10 @@ let lastUpdated = 0;
 const fpsMonitor = document.querySelector('.fps')!;
 
 function animate(time: number) {
-  planets.forEach((planet) => {
-    planet.update(time);
-  });
-
-  belt.rotation.y = (2 * Math.PI * time) / 1000 / Planet.secondsPerYear / BELT_YEAR;
-
-  if (satellite) {
-    const theta = (2 * Math.PI * time) / 1000 / 20;
-
-    const rotX = theta * 2 + Math.PI / 2;
-    const rotY = (Math.cos(theta) * Math.PI) / 8;
-    const rotZ = (Math.sin(theta) * Math.PI) / 8 + Math.PI / 2;
-
-    satellite.rotation.set(rotX, rotY, rotZ, 'ZYX');
-    satellite.position.x += 5 * 10e-6;
-  }
+  planetsTick(time);
+  moonsTick(time);
+  beltTick(time);
+  satelliteTick(time);
 
   controls.update();
   renderer.render(scene, camera);
