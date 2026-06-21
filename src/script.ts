@@ -1,5 +1,8 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
+import satelliteModel from './models/satellite.glb';
 
 import sunTexture from './textures/sun-color-map.jpg';
 import mercuryTexture from './textures/mercury-color-map.jpg';
@@ -18,8 +21,9 @@ import { Planet } from './planet';
 
 const scene = new THREE.Scene();
 
-const ambientLight = new THREE.AmbientLight('rgb(0 2 39)', 0.03);
+const ambientLight = new THREE.AmbientLight('rgb(0 2 39)', 0.1);
 const textureLoader = new THREE.TextureLoader();
+const gltfLoader = new GLTFLoader();
 
 // ===== SUN =====
 
@@ -34,7 +38,7 @@ const sun = new THREE.Mesh(
   })
 );
 
-const sunLight = new THREE.PointLight(0xffffff, 25, 60, 0.25);
+const sunLight = new THREE.PointLight(0xffffff, 25, 80, 0.25);
 
 sunLight.castShadow = true;
 sunLight.position.copy(sun.position);
@@ -113,6 +117,21 @@ for (let i = 0; i < 1000; i++) {
   belt.add(mesh);
 }
 
+// ===== SATELLITE =====
+
+let satellite: THREE.Object3D;
+gltfLoader.load(satelliteModel, (gltf) => {
+  const position = camera.position.clone();
+
+  position.multiplyScalar(0.999);
+  position.x += -0.03;
+
+  satellite = gltf.scene;
+  satellite.position.copy(position);
+  satellite.scale.setScalar(0.001);
+  scene.add(satellite);
+});
+
 // ====== SCENE ======
 
 scene.add(ambientLight);
@@ -134,7 +153,7 @@ textureLoader.load(cosmos, (texture) => {
 // ===== CAMERA, RENDERER, CONTROLS =====
 
 const aspectRatio = window.innerWidth / window.innerHeight;
-const camera = new THREE.PerspectiveCamera(45, aspectRatio);
+const camera = new THREE.PerspectiveCamera(45, aspectRatio, 0.001, 210);
 
 const renderer = new THREE.WebGLRenderer({
   canvas: document.querySelector('canvas.webgl')!,
@@ -178,6 +197,17 @@ function animate(time: number) {
   });
 
   belt.rotation.y = (2 * Math.PI * time) / 1000 / Planet.secondsPerYear / BELT_YEAR;
+
+  if (satellite) {
+    const theta = (2 * Math.PI * time) / 1000 / 20;
+
+    const rotX = theta * 2 + Math.PI / 2;
+    const rotY = (Math.cos(theta) * Math.PI) / 8;
+    const rotZ = (Math.sin(theta) * Math.PI) / 8 + Math.PI / 2;
+
+    satellite.rotation.set(rotX, rotY, rotZ, 'ZYX');
+    satellite.position.x += 5 * 10e-6;
+  }
 
   controls.update();
   renderer.render(scene, camera);
