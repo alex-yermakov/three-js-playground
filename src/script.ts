@@ -52,7 +52,6 @@ textureLoader.load(cosmos, (texture) => {
   texture.mapping = THREE.EquirectangularReflectionMapping;
 
   scene.background = texture;
-  scene.environment = texture;
 });
 
 // ===== CAMERA, RENDERER, CONTROLS =====

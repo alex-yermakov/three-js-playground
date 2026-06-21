@@ -10,7 +10,7 @@ const orbits = planetsArray.map((planet) => {
     planet.getPosition((i * Math.PI * 2) / config.orbitResolution)
   );
 
-  return new THREE.Line(
+  return new THREE.LineLoop(
     new THREE.BufferGeometry().setFromPoints(points),
     new THREE.LineBasicMaterial({
       color: planet.orbitColor,
