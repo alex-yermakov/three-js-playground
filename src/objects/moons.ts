@@ -4,6 +4,7 @@ import moonTexture from '../textures/moon-color-map.jpg';
 import { Celestial, TCelestialConfig } from './celestial';
 import { Planet, planetsArray } from './planets';
 import { EARTH_MOONS, MARS_MOONS } from '../constants';
+import { textureLoader } from '../utils';
 
 class Moon extends Celestial {
   constructor(
@@ -25,7 +26,6 @@ class Moon extends Celestial {
   }
 }
 
-const textureLoader = new THREE.TextureLoader();
 const group = new THREE.Group();
 
 const earth = planetsArray.find((planet) => planet.key === 'EARTH');

@@ -3,6 +3,13 @@ import * as THREE from 'three';
 import { config } from './config';
 import { SUN_RADIUS } from './constants';
 
+export const textureLoaderManager = new THREE.LoadingManager();
+export const textureLoader = new THREE.TextureLoader(textureLoaderManager);
+
+textureLoaderManager.onError = (url) => {
+  console.error(`Failed to load texture: ${url}`);
+};
+
 export const scaleSize = (size: number) => {
   return (size / SUN_RADIUS) ** (1 - config.sizeScaleFactor);
 };

@@ -12,7 +12,7 @@ import earthHeightTexture from '../textures/earth-height-map.jpg';
 import saturnRingAlphaTexture from '../textures/saturn-ring-alpha.png';
 import { PLANETS, SATURN_RING } from '../constants';
 import { Celestial, TCelestialConfig } from './celestial';
-import { remapRingUVs } from '../utils';
+import { remapRingUVs, textureLoader } from '../utils';
 
 export class Planet extends Celestial {
   private ring?: THREE.Mesh;
@@ -58,7 +58,6 @@ export class Planet extends Celestial {
   }
 }
 
-const textureLoader = new THREE.TextureLoader();
 const group = new THREE.Group();
 
 const textures = {

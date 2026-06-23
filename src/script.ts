@@ -9,11 +9,11 @@ import { moons, moonsTick } from './objects/moons';
 import { belt, beltTick } from './objects/belt';
 import { satellite, satelliteTick } from './objects/satellite';
 import { config } from './config';
+import { textureLoader } from './utils';
 
 const scene = new THREE.Scene();
 
 const ambientLight = new THREE.AmbientLight('rgb(0 2 39)', 0.1);
-const textureLoader = new THREE.TextureLoader();
 
 // ===== SUN =====
 
