@@ -2,7 +2,6 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 import sunTexture from './textures/sun-color-map.jpg';
-import cosmos from './textures/cosmos.jpg';
 import { planets, planetsTick } from './objects/planets';
 import { orbits } from './objects/orbits';
 import { moons, moonsTick } from './objects/moons';
@@ -10,6 +9,7 @@ import { belt, beltTick } from './objects/belt';
 import { satellite, satelliteTick } from './objects/satellite';
 import { config } from './config';
 import { textureLoader } from './utils';
+import { stars } from './objects/env';
 
 const scene = new THREE.Scene();
 
@@ -44,20 +44,14 @@ scene.add(orbits);
 scene.add(moons);
 scene.add(belt);
 scene.add(satellite);
+scene.add(stars);
 
 scene.background = new THREE.Color('rgb(0, 2, 27)');
-
-textureLoader.load(cosmos, (texture) => {
-  texture.colorSpace = THREE.SRGBColorSpace;
-  texture.mapping = THREE.EquirectangularReflectionMapping;
-
-  scene.background = texture;
-});
 
 // ===== CAMERA, RENDERER, CONTROLS =====
 
 const aspectRatio = window.innerWidth / window.innerHeight;
-const camera = new THREE.PerspectiveCamera(45, aspectRatio, 0.001, 210);
+const camera = new THREE.PerspectiveCamera(45, aspectRatio, 0.001, config.controlsMaxDistance + config.starMaxDistance);
 
 const renderer = new THREE.WebGLRenderer({
   canvas: document.querySelector('canvas.webgl')!,
@@ -71,8 +65,8 @@ camera.lookAt(sun.position);
 controls.enablePan = true;
 controls.enableDamping = true;
 controls.maxPolarAngle = Math.PI / 2;
-controls.minDistance = 2;
-controls.maxDistance = 150;
+controls.minDistance = config.controlsMinDistance;
+controls.maxDistance = config.controlsMaxDistance;
 
 renderer.shadowMap.enabled = true;
 

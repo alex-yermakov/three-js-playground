@@ -14,4 +14,10 @@ export const config = {
 
   cameraDistance: 60,
   cameraPitch: Math.PI / 3,
+
+  starMaxDistance: 160,
+  starSpread: 10,
+
+  controlsMinDistance: 2,
+  controlsMaxDistance: 150,
 };

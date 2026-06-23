@@ -44,3 +44,7 @@ export const remapRingUVs = (geometry: THREE.RingGeometry, innerRadius: number, 
 
   uv.needsUpdate = true;
 };
+
+export const applySizes = (shader: string) => {
+  return `attribute float aSize;\n${shader}`.replace('gl_PointSize = size', 'gl_PointSize = aSize');
+};

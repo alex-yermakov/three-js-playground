@@ -1,9 +1,9 @@
 import * as THREE from 'three';
 
 import { BELT_CLOSEST_DISTANCE, BELT_FARTHEST_DISTANCE, BELT_YEAR } from '../constants';
-import { calculateOrbitalProgress, scaleDistance, textureLoader } from '../utils';
+import { applySizes, calculateOrbitalProgress, scaleDistance, textureLoader } from '../utils';
 
-import asteroidAlphaTexture from '../textures/asteroid-alpha-map.png';
+import asteroidAlphaTexture from '../textures/circle-alpha-map.png';
 
 const beltClosestDistance = scaleDistance(BELT_CLOSEST_DISTANCE);
 const beltFarthestDistance = scaleDistance(BELT_FARTHEST_DISTANCE);
@@ -45,8 +45,7 @@ asteroids.geometry.setAttribute('position', new THREE.BufferAttribute(new Float3
 asteroids.geometry.setAttribute('aSize', new THREE.BufferAttribute(new Float32Array(sizes), 1));
 
 asteroids.material.onBeforeCompile = (shader) => {
-  shader.vertexShader = `attribute float aSize;\n${shader.vertexShader}`;
-  shader.vertexShader = shader.vertexShader.replace('gl_PointSize = size', 'gl_PointSize = aSize');
+  shader.vertexShader = applySizes(shader.vertexShader);
 };
 
 export { asteroids as belt };
