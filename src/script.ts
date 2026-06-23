@@ -30,6 +30,10 @@ const sun = new THREE.Mesh(
 
 const sunLight = new THREE.PointLight(0xffffff, 25, 80, 0.25);
 
+sunLight.shadow.mapSize.set(512, 512);
+sunLight.shadow.camera.near = 5;
+sunLight.shadow.camera.far = 60;
+
 sunLight.castShadow = true;
 sunLight.position.copy(sun.position);
 sun.add(sunLight);
