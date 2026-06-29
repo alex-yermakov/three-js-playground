@@ -1,42 +1,18 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-import sunTexture from './textures/sun-color-map.jpg';
 import { planets, planetsTick } from './objects/planets';
 import { orbits } from './objects/orbits';
 import { moons, moonsTick } from './objects/moons';
 import { belt, beltTick } from './objects/belt';
 import { satellite, satelliteTick } from './objects/satellite';
 import { config } from './config';
-import { textureLoader } from './utils';
 import { stars } from './objects/env';
+import { sun, sunTick } from './objects/sun';
 
 const scene = new THREE.Scene();
 
 const ambientLight = new THREE.AmbientLight('rgb(0 2 39)', 0.1);
-
-// ===== SUN =====
-
-const sunTextureMap = textureLoader.load(sunTexture, () => {
-  sunTextureMap.colorSpace = THREE.SRGBColorSpace;
-});
-
-const sun = new THREE.Mesh(
-  new THREE.SphereGeometry(1, 128, 128),
-  new THREE.MeshBasicMaterial({
-    map: sunTextureMap,
-  })
-);
-
-const sunLight = new THREE.PointLight(0xffffff, 25, 80, 0.25);
-
-sunLight.shadow.mapSize.set(512, 512);
-sunLight.shadow.camera.near = 5;
-sunLight.shadow.camera.far = 60;
-
-sunLight.castShadow = true;
-sunLight.position.copy(sun.position);
-sun.add(sunLight);
 
 // ====== SCENE ======
 
@@ -68,7 +44,7 @@ camera.lookAt(sun.position);
 
 controls.enablePan = true;
 controls.enableDamping = true;
-controls.maxPolarAngle = Math.PI / 2;
+// controls.maxPolarAngle = Math.PI / 2;
 controls.minDistance = config.controlsMinDistance;
 controls.maxDistance = config.controlsMaxDistance;
 
@@ -99,6 +75,7 @@ function animate(time: number) {
   moonsTick(time);
   beltTick(time);
   satelliteTick(time);
+  sunTick(time);
 
   controls.update();
   renderer.render(scene, camera);
