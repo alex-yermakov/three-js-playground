@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 
 import { BELT_CLOSEST_DISTANCE, BELT_FARTHEST_DISTANCE, BELT_YEAR } from '../constants';
-import { applySizes, calculateOrbitalProgress, scaleDistance, textureLoader } from '../utils';
+import { applySizes, calculateOrbitalProgress, pixelRatio, scaleDistance, textureLoader } from '../utils';
 
 import asteroidAlphaTexture from '../textures/circle-alpha-map.png';
 
@@ -9,8 +9,8 @@ const beltClosestDistance = scaleDistance(BELT_CLOSEST_DISTANCE);
 const beltFarthestDistance = scaleDistance(BELT_FARTHEST_DISTANCE);
 const beltWidth = beltFarthestDistance - beltClosestDistance;
 
-const minSize = 0.01;
-const maxSize = 0.5;
+const minSize = 0.005;
+const maxSize = 0.3;
 
 const count = 10000;
 
@@ -28,7 +28,7 @@ const points = Array.from({ length: count }, () => {
 }).flat();
 
 const sizes = Array.from({ length: count }, () => {
-  return minSize + Math.random() * (maxSize - minSize);
+  return (minSize + Math.random() * (maxSize - minSize)) * pixelRatio;
 });
 
 const asteroids = new THREE.Points(
@@ -38,6 +38,7 @@ const asteroids = new THREE.Points(
     transparent: true,
     alphaMap: textureLoader.load(asteroidAlphaTexture),
     sizeAttenuation: true,
+    depthWrite: false,
   })
 );
 

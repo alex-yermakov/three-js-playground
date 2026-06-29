@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { applySizes, textureLoader } from '../utils';
+import { applySizes, pixelRatio, textureLoader } from '../utils';
 import { config } from '../config';
 
 import starAlphaTexture from '../textures/circle-alpha-map.png';
@@ -18,7 +18,7 @@ const points = Array.from({ length: count }, () => {
 });
 
 const sizes = Array.from({ length: count }, () => {
-  return 0.5 + Math.random() * 1;
+  return (0.25 + Math.random() * 0.5) * pixelRatio;
 });
 
 const colors = Array.from({ length: count }, () => {

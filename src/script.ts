@@ -10,6 +10,7 @@ import { satellite, satelliteTick } from './objects/satellite';
 import { config } from './config';
 import { stars } from './objects/env';
 import { sun, sunTick } from './objects/sun';
+import { pixelRatio } from './utils';
 
 const scene = new THREE.Scene();
 
@@ -52,7 +53,7 @@ controls.maxDistance = config.controlsMaxDistance;
 renderer.shadowMap.enabled = true;
 
 renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setPixelRatio(pixelRatio);
 renderer.render(scene, camera);
 
 renderer.setAnimationLoop(animate);

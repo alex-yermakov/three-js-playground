@@ -3,6 +3,8 @@ import * as THREE from 'three';
 import { config } from './config';
 import { SUN_RADIUS } from './constants';
 
+export const pixelRatio = Math.min(window.devicePixelRatio, 2);
+
 export const textureLoaderManager = new THREE.LoadingManager();
 export const textureLoader = new THREE.TextureLoader(textureLoaderManager);
 
