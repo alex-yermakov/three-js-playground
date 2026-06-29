@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { GUI } from 'lil-gui';
 
 import { planets, planetsTick } from './objects/planets';
 import { orbits } from './objects/orbits';
@@ -44,7 +45,7 @@ camera.lookAt(sun.position);
 
 controls.enablePan = true;
 controls.enableDamping = true;
-// controls.maxPolarAngle = Math.PI / 2;
+controls.maxPolarAngle = Math.PI / 2;
 controls.minDistance = config.controlsMinDistance;
 controls.maxDistance = config.controlsMaxDistance;
 
@@ -55,6 +56,13 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.render(scene, camera);
 
 renderer.setAnimationLoop(animate);
+
+// ===== GUI =====
+const gui = new GUI();
+
+gui.add({ limitPolarAngle: true }, 'limitPolarAngle').onChange((value) => {
+  controls.maxPolarAngle = value ? Math.PI / 2 : Math.PI;
+});
 
 // ===== EVENT LISTENERS =====
 

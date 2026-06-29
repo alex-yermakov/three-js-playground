@@ -11,7 +11,7 @@ const bluish = new THREE.Color(0xa9c7ff);
 
 const points = Array.from({ length: count }, () => {
   const theta = Math.random() * Math.PI * 2;
-  const phi = Math.PI * (1 - Math.sin(Math.random() * Math.PI) ** 0.75);
+  const phi = Math.PI / 2 + Math.asin(Math.random() * 2 - 1);
   const r = config.starMaxDistance - config.starSpread * Math.random();
 
   return new THREE.Vector3().setFromSphericalCoords(r, phi, theta);
