@@ -13,8 +13,9 @@ export type TCelestialConfig = {
   orbitColor?: number;
 };
 
+const geometry = new THREE.SphereGeometry(1, 256, 128);
+
 export abstract class Celestial {
-  readonly geometry: THREE.SphereGeometry;
   readonly material: THREE.MeshStandardMaterial;
   readonly mesh: THREE.Mesh;
 
@@ -34,9 +35,9 @@ export abstract class Celestial {
     this.scaledRadius = scaleSize(this.cfg.radius);
     this.semiMajorAxis = scaleDistance(this.cfg.semiMajorAxis);
 
-    this.geometry = new THREE.SphereGeometry(this.scaledRadius, 256, 128);
     this.material = new THREE.MeshStandardMaterial({ map: map ?? null });
-    this.mesh = new THREE.Mesh(this.geometry, this.material);
+    this.mesh = new THREE.Mesh(geometry, this.material);
+    this.mesh.scale.setScalar(this.scaledRadius);
 
     this.mesh.castShadow = true;
     this.mesh.receiveShadow = true;
