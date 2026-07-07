@@ -75,10 +75,6 @@ window.addEventListener('resize', () => {
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 });
 
-let lastTime = 0;
-let lastUpdated = 0;
-const fpsMonitor = document.querySelector('.fps')!;
-
 function animate(time: number) {
   planetsTick(time);
   moonsTick(time);
@@ -88,13 +84,4 @@ function animate(time: number) {
 
   controls.update();
   renderer.render(scene, camera);
-
-  const fps = 1000 / (time - lastTime);
-
-  lastTime = time;
-
-  if (time - lastUpdated > 1000) {
-    fpsMonitor.textContent = `FPS: ${fps.toFixed(2)}`;
-    lastUpdated = time;
-  }
 }
