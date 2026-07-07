@@ -10,7 +10,7 @@ export const sun = new THREE.Mesh(
     vertexShader,
     fragmentShader,
     uniforms: {
-      time: { value: 0 },
+      uTime: { value: 0 },
     },
   })
 );
@@ -26,6 +26,6 @@ sunLight.position.copy(sun.position);
 sun.add(sunLight);
 
 export const sunTick = (time: number) => {
-  sun.material.uniforms.time.value = time / 1000;
+  sun.material.uniforms.uTime.value = time / 1000;
   sun.rotation.y = calculateRotationProgress(time) / 2;
 };

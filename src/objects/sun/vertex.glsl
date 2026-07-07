@@ -1,4 +1,4 @@
-uniform float time;
+uniform float uTime;
 
 varying vec3 vColor;
 
@@ -8,9 +8,11 @@ vec3 colorDark = vec3(1.0, 0.584, 0.0);      // Darkest: deep orange-gold, from 
 float cnoise(vec4 P);
 
 void main() {
-  gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+  float noise =
+    cnoise(vec4(position.xyz * 3.5, uTime / 2.0)) +
+    cnoise(vec4(position.xyz * 10.0, uTime / 1.0)) * 0.25;
 
-  float noise = cnoise(vec4(position.xyz * 3.5, time / 2.0)) + cnoise(vec4(position.xyz * 10.0, time / 1.0)) * 0.25;
+  gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
 
   vColor = mix(colorDark, colorBright, noise);
 }
