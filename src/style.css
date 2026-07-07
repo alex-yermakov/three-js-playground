@@ -1,4 +1,9 @@
 @layer reset {
+  :root {
+    --clr-dark: oklch(0.13 0.08 261.18 / 1);
+    --clr-light: oklch(0.97 0.006 261.18 / 1);
+  }
+
   html,
   body {
     height: 100%;
@@ -11,27 +16,27 @@
     font:
       16px / 1.5 Helvetica,
       sans-serif;
-    background-color: oklch(0.13 0.08 261.18 / 1);
+    background-color: var(--clr-dark);
     overflow: clip;
   }
 
   @media (prefers-color-scheme: light) {
     body {
-      background-color: oklch(0.97 0.006 261.18 / 1);
+      background-color: var(--clr-light);
     }
   }
 }
 
-.fps-monitor {
+.credits {
   position: fixed;
-  inset: auto 1rem 1rem auto;
-  padding: 1rem;
-  min-width: 100px;
-  text-align: right;
-  background-color: oklch(0.13 0.08 261.18 / 1);
-  border: 1px solid oklch(0.97 0.006 261.18 / 1);
-  border-radius: 0.5rem;
-  font-weight: 600;
-  color: oklch(0.97 0.006 261.18 / 1);
-  text-shadow: 0 0 0.5rem oklch(0.13 0.08 261.18 / 1);
+  inset: auto 0 0 auto;
+  background-color: inherit;
+  color: light-dark(var(--clr-light), var(--clr-dark));
+  margin: 0;
+  padding: 0.5rem 0.5rem;
+  font-size: 0.875rem;
+
+  a {
+    color: inherit;
+  }
 }
