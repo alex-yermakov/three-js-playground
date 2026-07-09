@@ -100,8 +100,6 @@ export const NEPTUNE = {
   orbitColor: 0x4166f5,
 };
 
-export const PLANETS = [MERCURY, VENUS, EARTH, MARS, JUPITER, SATURN, URANUS, NEPTUNE];
-
 export const MOON = {
   key: 'MOON',
   radius: 1_737.4,
@@ -134,9 +132,6 @@ export const DEIMOS = {
   dayLength: 1.26244, // in earth days
   axialTilt: 0.034, // in radians
 };
-
-export const EARTH_MOONS = [MOON];
-export const MARS_MOONS = [PHOBOS, DEIMOS];
 
 export const SATURN_RING = {
   closestDistance: 74_000,

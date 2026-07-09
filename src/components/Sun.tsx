@@ -2,8 +2,8 @@ import { useFrame } from '@react-three/fiber';
 import { useRef } from 'react';
 import { Mesh, ShaderMaterial } from 'three';
 
-import vertexShader from '../objects/sun/vertex.glsl';
-import fragmentShader from '../objects/sun/fragment.glsl';
+import vertexShader from '../shaders/sun/vertex.glsl';
+import fragmentShader from '../shaders/sun/fragment.glsl';
 import { calculateRotationProgress } from '../utils';
 
 export default function Sun() {
