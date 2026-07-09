@@ -23,6 +23,7 @@ import uranusTexture from './textures/uranus-color-map.jpg';
 import neptuneTexture from './textures/neptune-color-map.jpg';
 import moonTexture from './textures/moon-color-map.jpg';
 import saturnRingAlphaTexture from './textures/saturn-ring-alpha.png';
+import Satellite from './components/Satellite';
 
 export function App() {
   return (
@@ -46,6 +47,8 @@ export function App() {
       <color attach="background" args={['rgb(0, 2, 27)']} />
 
       <Sun />
+      <Stars />
+      <Belt />
 
       <Suspense>
         <Planet cfg={constants.MERCURY} map={mercuryTexture} />
@@ -68,10 +71,9 @@ export function App() {
 
         <Planet cfg={constants.URANUS} map={uranusTexture} />
         <Planet cfg={constants.NEPTUNE} map={neptuneTexture} />
-      </Suspense>
 
-      <Stars />
-      <Belt />
+        <Satellite />
+      </Suspense>
     </Canvas>
   );
 }
