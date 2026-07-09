@@ -21,11 +21,11 @@ export const scaleDistance = (distance: number) => {
 };
 
 export const calculateOrbitalProgress = (time: number) => {
-  return (time / 1000) * config.orbitalSpeed;
+  return time * config.orbitalSpeed;
 };
 
 export const calculateRotationProgress = (time: number) => {
-  return (time / 1000) * config.rotationSpeed;
+  return time * config.rotationSpeed;
 };
 
 // AI

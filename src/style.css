@@ -11,9 +11,7 @@
   }
 
   body {
-    display: grid;
     margin: 0;
-    place-items: center;
     font:
       16px / 1.5 Helvetica,
       sans-serif;
