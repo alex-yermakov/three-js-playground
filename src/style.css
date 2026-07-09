@@ -5,14 +5,13 @@
   }
 
   html,
-  body {
+  body,
+  #root {
     height: 100%;
   }
 
   body {
-    display: grid;
     margin: 0;
-    place-items: center;
     font:
       16px / 1.5 Helvetica,
       sans-serif;
@@ -31,7 +30,7 @@
   position: fixed;
   inset: auto 0 0 auto;
   background-color: inherit;
-  color: light-dark(var(--clr-light), var(--clr-dark));
+  color: var(--clr-light);
   margin: 0;
   padding: 0.5rem 0.5rem;
   font-size: 0.875rem;

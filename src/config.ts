@@ -20,4 +20,6 @@ export const config = {
 
   controlsMinDistance: 2,
   controlsMaxDistance: 150,
+
+  starsCount: 10_000,
 };
