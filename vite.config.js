@@ -1,3 +1,4 @@
+import react from '@vitejs/plugin-react';
 import restart from 'vite-plugin-restart';
 import glsl from 'vite-plugin-glsl';
 
@@ -16,6 +17,7 @@ export default {
     sourcemap: true, // Add sourcemap
   },
   plugins: [
+    react(),
     restart({ restart: ['../static/**'] }), // Restart server on static file change
     glsl(),
   ],
