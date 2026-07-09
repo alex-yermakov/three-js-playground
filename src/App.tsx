@@ -16,17 +16,7 @@ import jupiterTexture from './textures/jupiter-color-map.jpg';
 import saturnTexture from './textures/saturn-color-map.jpg';
 import uranusTexture from './textures/uranus-color-map.jpg';
 import neptuneTexture from './textures/neptune-color-map.jpg';
-
-const textures = {
-  MERCURY: mercuryTexture,
-  VENUS: venusTexture,
-  EARTH: earthTexture,
-  MARS: marsTexture,
-  JUPITER: jupiterTexture,
-  SATURN: saturnTexture,
-  URANUS: uranusTexture,
-  NEPTUNE: neptuneTexture,
-};
+import Stars from './components/Stars';
 
 export function App() {
   return (
@@ -37,6 +27,7 @@ export function App() {
         far: config.controlsMaxDistance + config.starMaxDistance,
         position: new Vector3().setFromSphericalCoords(config.cameraDistance, config.cameraPitch, 0),
       }}
+      shadows
     >
       <Perf />
       <OrbitControls minDistance={config.controlsMinDistance} maxDistance={config.controlsMaxDistance} />
@@ -46,14 +37,16 @@ export function App() {
 
       <Sun />
 
-      <Planet cfg={constants.MERCURY} map={textures[constants.MERCURY.key]} />
-      <Planet cfg={constants.VENUS} map={textures[constants.VENUS.key]} />
-      <Planet cfg={constants.EARTH} map={textures[constants.EARTH.key]} />
-      <Planet cfg={constants.MARS} map={textures[constants.MARS.key]} />
-      <Planet cfg={constants.JUPITER} map={textures[constants.JUPITER.key]} />
-      <Planet cfg={constants.SATURN} map={textures[constants.SATURN.key]} />
-      <Planet cfg={constants.URANUS} map={textures[constants.URANUS.key]} />
-      <Planet cfg={constants.NEPTUNE} map={textures[constants.NEPTUNE.key]} />
+      <Planet cfg={constants.MERCURY} map={mercuryTexture} />
+      <Planet cfg={constants.VENUS} map={venusTexture} />
+      <Planet cfg={constants.EARTH} map={earthTexture} />
+      <Planet cfg={constants.MARS} map={marsTexture} />
+      <Planet cfg={constants.JUPITER} map={jupiterTexture} />
+      <Planet cfg={constants.SATURN} map={saturnTexture} />
+      <Planet cfg={constants.URANUS} map={uranusTexture} />
+      <Planet cfg={constants.NEPTUNE} map={neptuneTexture} />
+
+      <Stars />
     </Canvas>
   );
 }
