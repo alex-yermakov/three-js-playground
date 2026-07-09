@@ -140,6 +140,6 @@ export const MARS_MOONS = [PHOBOS, DEIMOS];
 
 export const SATURN_RING = {
   closestDistance: 74_000,
-  farthestDistance: 180_000,
+  farthestDistance: 240_000,
   angle: 0.47647,
 };
