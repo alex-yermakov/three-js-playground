@@ -6,6 +6,8 @@ import { Perf } from 'r3f-perf';
 import { config } from './config';
 import Sun from './components/Sun';
 import Planet from './components/Planet';
+import Stars from './components/Stars';
+import Belt from './components/Belt';
 import * as constants from './constants';
 
 import mercuryTexture from './textures/mercury-color-map.jpg';
@@ -16,7 +18,6 @@ import jupiterTexture from './textures/jupiter-color-map.jpg';
 import saturnTexture from './textures/saturn-color-map.jpg';
 import uranusTexture from './textures/uranus-color-map.jpg';
 import neptuneTexture from './textures/neptune-color-map.jpg';
-import Stars from './components/Stars';
 
 export function App() {
   return (
@@ -47,6 +48,7 @@ export function App() {
       <Planet cfg={constants.NEPTUNE} map={neptuneTexture} />
 
       <Stars />
+      <Belt />
     </Canvas>
   );
 }
