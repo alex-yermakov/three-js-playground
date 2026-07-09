@@ -13,19 +13,21 @@ type TRingsConfig = {
 };
 
 type TRingsProps = {
+  radius: number;
   cfg: TRingsConfig;
   alphaMap: string;
 };
 
-export default function Rings({ cfg, alphaMap }: TRingsProps) {
+export default function Rings({ cfg, radius, alphaMap }: TRingsProps) {
   const { focus } = useContext(OrbitContext);
 
   const alphaTexture = useTexture(alphaMap);
   const geometryRef = useRef<RingGeometry>(null);
   const ref = useRef<Mesh>(null);
 
-  const innerRadius = useMemo(() => scaleSize(cfg.closestDistance), [cfg.closestDistance]);
-  const outerRadius = useMemo(() => scaleSize(cfg.farthestDistance), [cfg.farthestDistance]);
+  const factor = scaleSize(radius) / radius;
+  const innerRadius = factor * cfg.closestDistance;
+  const outerRadius = factor * cfg.farthestDistance;
 
   useFrame(() => {
     if (ref.current != null && focus.current != null) {

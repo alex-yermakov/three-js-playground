@@ -66,7 +66,7 @@ export function App() {
         <Planet cfg={constants.JUPITER} map={jupiterTexture} />
 
         <Planet cfg={constants.SATURN} map={saturnTexture}>
-          <Rings cfg={constants.SATURN_RING} alphaMap={saturnRingAlphaTexture} />
+          <Rings radius={constants.SATURN.radius} cfg={constants.SATURN_RING} alphaMap={saturnRingAlphaTexture} />
         </Planet>
 
         <Planet cfg={constants.URANUS} map={uranusTexture} />
