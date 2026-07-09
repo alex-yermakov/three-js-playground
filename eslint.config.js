@@ -1,6 +1,7 @@
 import js from '@eslint/js'
 import globals from 'globals'
 import tseslint from 'typescript-eslint'
+import reactHooks from 'eslint-plugin-react-hooks'
 
 export default [
   {
@@ -8,8 +9,9 @@ export default [
   },
   js.configs.recommended,
   ...tseslint.configs.recommended,
+  reactHooks.configs.flat['recommended-latest'],
   {
-    files: ['**/*.{js,ts}'],
+    files: ['**/*.{js,ts,tsx}'],
     languageOptions: {
       sourceType: 'module',
       globals: {

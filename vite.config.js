@@ -17,7 +17,11 @@ export default {
     sourcemap: true, // Add sourcemap
   },
   plugins: [
-    react(),
+    react({
+      babel: {
+        plugins: [['babel-plugin-react-compiler', { target: '19' }]],
+      },
+    }),
     restart({ restart: ['../static/**'] }), // Restart server on static file change
     glsl(),
   ],
