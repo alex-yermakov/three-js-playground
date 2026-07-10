@@ -1,10 +1,10 @@
-import { createContext, RefObject } from 'react';
+import { createContext } from 'react';
 import { Object3D, Vector3 } from 'three';
 
 export const OrbitContext = createContext<{
-  focus: RefObject<Object3D | null>;
+  focus: Object3D | null;
   getPosition: (theta: number) => Vector3;
 }>({
-  focus: { current: null },
+  focus: null,
   getPosition: () => new Vector3(),
 });

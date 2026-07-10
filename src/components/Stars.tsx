@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useState } from 'react';
 import { useTexture } from '@react-three/drei';
 import { Color, Vector3 } from 'three';
 
@@ -12,7 +12,7 @@ const bluish = new Color(0xa9c7ff);
 export default function Stars() {
   const texture = useTexture(starAlphaTexture);
 
-  const points = useMemo(() => {
+  const [points] = useState(() => {
     return new Float32Array(
       Array.from({ length: config.starsCount }, () => {
         const theta = Math.random() * Math.PI * 2;
@@ -22,15 +22,15 @@ export default function Stars() {
         return new Vector3().setFromSphericalCoords(r, phi, theta).toArray();
       }).flat()
     );
-  }, []);
+  });
 
-  const sizes = useMemo(() => {
+  const [sizes] = useState(() => {
     return new Float32Array(config.starsCount).map(() => {
       return (0.25 + Math.random() * 0.5) * pixelRatio;
     });
-  }, []);
+  });
 
-  const colors = useMemo(() => {
+  const [colors] = useState(() => {
     return new Float32Array(
       Array.from({ length: config.starsCount }, () => {
         const blueFactor = Math.random();
@@ -39,7 +39,7 @@ export default function Stars() {
         return new Color('white').lerp(reddish, redFactor).lerp(bluish, blueFactor).toArray();
       }).flat()
     );
-  }, []);
+  });
 
   return (
     <points>

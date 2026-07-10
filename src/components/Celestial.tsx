@@ -1,4 +1,4 @@
-import { PropsWithChildren, useCallback, useContext, useMemo, useRef } from 'react';
+import { PropsWithChildren, useCallback, useContext, useMemo, useState } from 'react';
 import { Mesh, SphereGeometry, Vector3 } from 'three';
 import { useFrame } from '@react-three/fiber';
 import { useTexture } from '@react-three/drei';
@@ -25,9 +25,11 @@ export type TCelestialProps = PropsWithChildren<{
 const geometry = new SphereGeometry(1, 256, 128);
 
 export default function Celestial({ cfg, map, children }: TCelestialProps) {
+  const [ref, setRef] = useState<Mesh | null>(null);
   const { focus } = useContext(OrbitContext);
 
-  const ref = useRef<Mesh>(null);
+  const focusPosition = focus?.position;
+
   const texture = useTexture(map ? { map } : {});
 
   const radius = useMemo(() => scaleSize(cfg.radius), [cfg.radius]);
@@ -42,15 +44,15 @@ export default function Celestial({ cfg, map, children }: TCelestialProps) {
       const z = -r * Math.sin(theta) * Math.cos(alpha);
       const y = r * Math.sin(alpha);
 
-      const center = focus.current?.position.clone() ?? new Vector3();
+      const center = focusPosition?.clone() ?? new Vector3();
 
       return center.add({ x, y, z });
     },
-    [semiMajorAxis, cfg.eccentricity, cfg.orbitAngle, focus]
+    [semiMajorAxis, cfg.eccentricity, cfg.orbitAngle, focusPosition]
   );
 
   useFrame(({ clock }) => {
-    if (ref.current == null) {
+    if (ref == null) {
       return;
     }
 
@@ -61,13 +63,13 @@ export default function Celestial({ cfg, map, children }: TCelestialProps) {
     const orbitalAngle = (orbitalProgress * Math.PI * 2) / cfg.orbitPeriod;
     const rotationAngle = (rotationProgress * Math.PI * 2) / cfg.dayLength;
 
-    ref.current.position.copy(getPosition(orbitalAngle));
-    ref.current.rotation.y = rotationAngle;
+    ref.position.copy(getPosition(orbitalAngle));
+    ref.rotation.set(0, rotationAngle, 0);
   });
 
   return (
     <group>
-      <mesh ref={ref} scale={radius} rotation-z={cfg.axialTilt} geometry={geometry} castShadow receiveShadow>
+      <mesh ref={setRef} scale={radius} rotation-z={cfg.axialTilt} geometry={geometry} castShadow receiveShadow>
         <meshStandardMaterial map={texture.map} />
       </mesh>
 

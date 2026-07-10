@@ -30,8 +30,8 @@ export default function Rings({ cfg, radius, alphaMap }: TRingsProps) {
   const outerRadius = factor * cfg.farthestDistance;
 
   useFrame(() => {
-    if (ref.current != null && focus.current != null) {
-      ref.current.position.copy(focus.current.position);
+    if (ref.current != null && focus != null) {
+      ref.current.position.copy(focus.position);
     }
   });
 

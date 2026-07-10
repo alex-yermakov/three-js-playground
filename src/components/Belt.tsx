@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useState } from 'react';
 import { useTexture } from '@react-three/drei';
 
 import { BELT_CLOSEST_DISTANCE, BELT_FARTHEST_DISTANCE } from '../constants';
@@ -17,7 +17,7 @@ const count = 10_000;
 export default function Belt() {
   const texture = useTexture(asteroidAlphaTexture);
 
-  const points = useMemo(() => {
+  const [points] = useState(() => {
     return new Float32Array(
       Array.from({ length: count }, () => {
         const theta = Math.random() * Math.PI * 2;
@@ -32,13 +32,13 @@ export default function Belt() {
         return [x, y, z];
       }).flat()
     );
-  }, []);
+  });
 
-  const sizes = useMemo(() => {
+  const [sizes] = useState(() => {
     return new Float32Array(count).map(() => {
       return (minSize + Math.random() * (maxSize - minSize)) * pixelRatio;
     });
-  }, []);
+  });
 
   return (
     <points>
