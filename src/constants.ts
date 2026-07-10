@@ -12,7 +12,7 @@ export const MERCURY = {
   orbitAngle: 0.2408467, // in radians
   orbitPeriod: 0.2408467, // in earth years
   dayLength: 175.938667, // in earth days
-  axialTilt: 0.034, // in radians
+  axialTilt: 0.00059, // in radians
   orbitColor: 0x808080,
 };
 
@@ -48,7 +48,7 @@ export const MARS = {
   orbitAngle: 0.0349066, // in radians
   orbitPeriod: 1.8808158, // in earth years
   dayLength: 1.02595675, // in earth days
-  axialTilt: 1.8506, // in radians
+  axialTilt: 0.4397, // in radians
   orbitColor: 0xc1440e,
 };
 
@@ -105,7 +105,7 @@ export const MOON = {
   radius: 1_737.4,
   semiMajorAxis: 384_400,
   eccentricity: 0.0549,
-  orbitAngle: 0.0000104, // in radians
+  orbitAngle: 0.09, // in radians
   orbitPeriod: 0.0748, // in earth years
   dayLength: 27.321661, // in earth days
   axialTilt: 0.034, // in radians
@@ -116,7 +116,7 @@ export const PHOBOS = {
   radius: 13.2,
   semiMajorAxis: 9_376,
   eccentricity: 0.0151,
-  orbitAngle: 0.0000071, // in radians
+  orbitAngle: 0.019, // in radians
   orbitPeriod: 0.3189102, // in earth years
   dayLength: 0.3229, // in earth days
   axialTilt: 0.034, // in radians
@@ -127,7 +127,7 @@ export const DEIMOS = {
   radius: 6.2,
   semiMajorAxis: 23_460,
   eccentricity: 0.0000188,
-  orbitAngle: 0.0, // in radians
+  orbitAngle: 0.0016, // in radians
   orbitPeriod: 1.26244, // in earth years
   dayLength: 1.26244, // in earth days
   axialTilt: 0.034, // in radians

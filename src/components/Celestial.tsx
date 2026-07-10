@@ -64,7 +64,7 @@ export default function Celestial({ cfg, map, children }: TCelestialProps) {
     const rotationAngle = (rotationProgress * Math.PI * 2) / cfg.dayLength;
 
     ref.position.copy(getPosition(orbitalAngle));
-    ref.rotation.set(0, rotationAngle, 0);
+    ref.rotation.set(0, rotationAngle, cfg.axialTilt, 'ZXY');
   });
 
   return (
