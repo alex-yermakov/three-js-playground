@@ -1,4 +1,4 @@
-import { useMemo, useRef } from 'react';
+import { useMemo } from 'react';
 import { useTexture } from '@react-three/drei';
 import { Color, Vector3 } from 'three';
 

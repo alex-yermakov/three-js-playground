@@ -46,7 +46,7 @@ export default function Celestial({ cfg, map, children }: TCelestialProps) {
 
       return center.add({ x, y, z });
     },
-    [semiMajorAxis, cfg.eccentricity, cfg.orbitAngle]
+    [semiMajorAxis, cfg.eccentricity, cfg.orbitAngle, focus]
   );
 
   useFrame(({ clock }) => {

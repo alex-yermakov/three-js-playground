@@ -1,4 +1,4 @@
-import { useContext, useLayoutEffect, useMemo, useRef } from 'react';
+import { useContext, useLayoutEffect, useRef } from 'react';
 import { DoubleSide, Mesh, RingGeometry } from 'three';
 import { useTexture } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
