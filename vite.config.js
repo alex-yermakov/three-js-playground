@@ -1,5 +1,5 @@
 import react from '@vitejs/plugin-react';
-import restart from 'vite-plugin-restart';
+import fullReload from 'vite-plugin-full-reload';
 import glsl from 'vite-plugin-glsl';
 
 export default {
@@ -22,7 +22,7 @@ export default {
         plugins: [['babel-plugin-react-compiler', { target: '19' }]],
       },
     }),
-    restart({ restart: ['../static/**'] }), // Restart server on static file change
+    fullReload(['../static/**']), // Full page reload on static file change
     glsl(),
   ],
 };
